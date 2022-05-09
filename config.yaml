@@ -1,0 +1,5 @@
+#configfile config.yaml
+inputfiles: ~/Desktop/Uploaded_files/demofiles_wetsus4000/
+samples:
+    A : demofile_wetsus4000R1.fastq
+    B : demofile_wetsus4000R2.fastq
