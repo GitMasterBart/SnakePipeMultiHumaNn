@@ -1,5 +1,7 @@
 #configfile config.yaml
 inputfiles: ~/Desktop/Uploaded_files/demofiles_wetsus4000/
-samples:
-    A : demofile_wetsus4000R1.fastq
-    B : demofile_wetsus4000R2.fastq
+silvadatabase:  -db ~/Desktop/Uploaded_files/humann_dbs/rRNA_SILVA128/
+trimmomatic:  --trimmomatic ~/Desktop/kneaddataMap/Trimmomatic-0.36/
+--bypass-trf: --bypass-trf
+fastqc-start: --run-fastqc-start
+fastqc-end:  --run-fastqc-end
