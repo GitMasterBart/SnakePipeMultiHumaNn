@@ -1,56 +1,37 @@
 import os
 
 configfile: "config.yaml"
+workdir: config['inputfiles']
+
+SAMPLES = config["samples"]
+NAME = config["name"]
 
 rule all:
     input:
-       "kneaddata_output"
+        expand("humantool_output_{name}",name=NAME)
 
 
 rule kneaddata:
     input:
-        "/Users/bengels/Desktop/Uploaded_files/demofileswithdi/"
+        expand("{sample}.fastq", sample = SAMPLES),
+    params: database=config['silvadatabase'],
+        trimmomatic=config["trimmomatic"],
+        fastqc_start=config["fastqc-start"],
+        fastqc_end=config["fastqc-end"],
+        bypass_trf=config["--bypass-trf"],
     output:
+            # output = "{sample}.fastqc"
         ouput = directory("kneaddata_output")
     threads: 8
-    params: database = config['silvadatabase'],
-            trimmomatic = config["trimmomatic"],
-            fastqc_start = config["fastqc-start"],
-            fastqc_end = config["fastqc-end"],
-            bypass_trf = config["--bypass-trf"]
-    run:
-        forward = ""
-        backward = ""
-        # os.system("rm -r /Users/bengels/Desktop/Uploaded_files/demofileswithdi/.DS_Store")
-        for i in os.listdir(str(input)):
-            print(i)
-            for file in os.listdir(str(input)+ "/" + i):
-                print(file)
-                # print(os.path.join(input, file))
-                if "R1" in str(file):
-                    forward = str(file)
-                elif "R2" in str(file):
-                    backward = str(file)
-            os.system("kneaddata -i " + str(input)+ "/" + i + "/" +
-                      forward + " -i " + str(input)+ "/" + i + "/" +
-                      backward + f" -o  {output} {params.trimmomatic} " +
-                                 f"{params.fastqc_start} {params.fastqc_end} {params.bypass_trf} {params.database}")
-    # -db ~/Desktop/Uploaded_files/humann_dbs/silvadb/ ~/../../Volumes/PHILIPS\ UFD/rRNA_SILVA128/
+    shell:
+        "kneaddata -i {input[0]} -i {input[1]} -o  {output} {params.trimmomatic} {params.fastqc_start} {params.fastqc_end} {params.bypass_trf} {params.database}"
 
-
-
-rule write_files_to_webpage:
-    input: fastq_dir = "kneaddata_output/fastqc/",
-
-    output: directory("~/Desktop/StageWetsus2022/BakedInBiobakery/static/img/fastqc_results/")
-
-    shell: "cp -r {input}/*paired_*_fastqc {output} "
 
 rule reformat_file:
-    input: "/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/kneaddata_output"
+    input: "kneaddata_output"
 
-    output: "/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/interleave_map/interleaved.fastq"
-
+    output: expand("interleaved_{name}.fastq", name = NAME)
+    threads: 8
     run:
         file1 = ""
         file2 = ""
@@ -61,8 +42,34 @@ rule reformat_file:
                 file1 = str(file)
             elif "paired_2" in str(file):
                 file2 = str(file)
-        os.system(f"bbmap/reformat.sh in1={input}/{file1} in2={input}/{file2} out={output}")
+        os.system(f"/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input}/{file1} in2={input}/{file2} out={output}")
 
-rule humann_tool:
-    input: "/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/interleave_map/interleaved.fastq"
+
+# def find_files_in_directories(file_path):
+#         """
+#         Scrapes the directory that is given as variable file_pathway
+#         :return: void
+#         """
+#         list_files = []
+#         for file in os.listdir(file_path):
+#             objects_in_directory = os.path.join(file_path, file)
+#             # checking if it is a file
+#             if os.path.isfile(objects_in_directory):
+#                 list_files.append(objects_in_directory)
+#         return list_files
+#
+#
+# interleave_list = find_files_in_directories(config["interleave_map"])
+
+rule humannTool:
+        input: expand("interleaved_{name}.fastq", name = NAME)
+        params:
+            protein_database=config["protein-db"],
+            bypass_n_search=config["bypass-n-search"],
+            nucleotide_db=config["nucleotide_db"]
+        threads: 2
+        output: directory(expand("humantool_output_{name}",name=NAME))
+
+        shell:
+            "humann -i {input} -o {output} {params.protein_database} {params.bypass_n_search} {params.nucleotide_db}"
 
