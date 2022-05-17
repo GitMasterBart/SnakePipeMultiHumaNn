@@ -1,12 +1,20 @@
 #configfile config.yaml
-inputfiles: /Users/bengels/Desktop/Uploaded_files/fuldata_first/
+#dataset:
+#  first: first,
+#  second : second
+#samples:
+#  A : R1
+#  B : R2
+
+inputfiles: /Users/bengels/Desktop/Uploaded_files/poging2_v1/
 silvadatabase:  -db ~/Desktop/Uploaded_files/humann_dbs/silvadb/
 trimmomatic:  --trimmomatic ~/Desktop/kneaddataMap/Trimmomatic-0.36/
 --bypass-trf: --bypass-trf
 fastqc-start: --run-fastqc-start
 fastqc-end:  --run-fastqc-end
 name: map_name
-samples: [RBAR-CM1-Run1-T24_S11_L002_R1_001 ,RBAR-CM1-Run1-T24_S11_L002_R2_001]
+samples: [demofile_wetsusR1 ,demofile_wetsusR2]
+dataset : [first, second]
 
 # humanntool
 
@@ -17,3 +25,4 @@ protein-db: --protein-database ~/Desktop/Uploaded_files/humann_dbs/unireffull/
 nucleotide_db: --nucleotide-database /Users/bengels/Desktop/Uploaded_files/humann_dbs/chocophlan
 
 interleave_map: /Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/interleave_map/
+
