@@ -13,8 +13,8 @@ trimmomatic:  --trimmomatic ~/Desktop/kneaddataMap/Trimmomatic-0.36/
 fastqc-start: --run-fastqc-start
 fastqc-end:  --run-fastqc-end
 name: map_name
-samples: [demofile_wetsusR1 ,demofile_wetsusR2]
-dataset : [first, second]
+samples: [_R1 ,_R2]
+dataset : [demofile_wetsus_0, demofile_wetsus_1]
 
 # humanntool
 
