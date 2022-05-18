@@ -29,20 +29,20 @@ rule kneaddata:
     threads: 8
 
     shell:
-        "kneaddata -i {input}/{SAMPLES[0]}.fastq -i {input}/{SAMPLES[1]}.fastq -o  {output} {params.trimmomatic} {params.fastqc_start} {params.fastqc_end} {params.bypass_trf} {params.database}"
+        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o  {output} {params.trimmomatic} {params.fastqc_start} {params.fastqc_end} {params.bypass_trf} {params.database}"
 
 
 rule reformat_file:
-    input:"{dataset}/kneaddata_output"
+    input:"{dataset}"
 
     output: "{dataset}/interleaved.fastq"
     threads: 8
     params:
-        file1 = "demofile_wetsusR1_kneaddata_paired_1.fastq",
-        file2 = "demofile_wetsusR1_kneaddata_paired_2.fastq"
+        file1 = "kneaddata_paired_1.fastq",
+        file2 = "kneaddata_paired_2.fastq"
 
     shell:
-        "/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input}/{params.file1} in2={input}/{params.file2} out={output}"
+        "/Users/bengels/Desktop/StageWetsus2022/BakedInBiobakery/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input}/kneaddata_output/{input}_R1_{params.file1} in2={input}/kneaddata_output/{input}_R1_{params.file2} out={output}"
     # run:
     #     file1 = ""
     #     file2 = ""
