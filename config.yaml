@@ -23,7 +23,7 @@ dataset : []
 # humanntool
 
 bypass_n_search:
-remove-temp-output:
+remove_temp_output:
 verbose:
 protein_db:
 nucleotide_db:

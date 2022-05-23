@@ -9,11 +9,16 @@ SAMPLES = config["samples"]
 NAME = config["name"]
 dataset = config["dataset"]
 trimmomatic = "--bypass-trim"
-fastqc_start = ""
-fastqc_end = ""
-bypass_trf = ""
-database = ""
+fastqc_start = " "
+fastqc_end = " "
+bypass_trf = "--bypass-trf"
+database = " "
 
+remove_temp_output = " "
+verbose = " "
+bypass_n_search = " "
+nucleotide_db =" "
+protein_database = ""
 ## variables
 try:
     database = "-db " + config['silvadatabase'],
@@ -22,21 +27,42 @@ except (KeyError, TypeError):
 
 try:
     fastqc_end = config["fastqc-end"]
-except (KeyError, TypeError):
+except (KeyError):
     pass
 
 try:
     fastqc_start = config["fastqc-start"]
+except (KeyError):
+    pass
+
+try:
+    trimmomatic = "--trimmomatic " + config["trimmomatic"]
+except (KeyError, TypeError):
+    pass
+
+
+try:
+    remove_temp_output = config["remove_temp_output"]
 except (KeyError, TypeError):
     pass
 
 try:
-    trimmomatic = "--trimmomatic " + config["trimmomatic"],
+    bypass_n_search = config["bypass_n_search"],
 except (KeyError, TypeError):
     pass
 
 try:
-    bypass_trf = config["bypass_trf"],
+    nucleotide_db = " --nucleotide-database " + str(config["nucleotide_db"]),
+except (KeyError, TypeError):
+    pass
+
+try:
+    protein_database = "--protein-database " + str(config["protein_db"]),
+except (KeyError, TypeError):
+    pass
+
+try:
+    verbose = config["verbose"]
 except (KeyError, TypeError):
     pass
 
@@ -51,11 +77,11 @@ rule kneaddata:
        "{dataset}"
     output:
             # output = "{sample}.fastqc"
-        ouput = directory("{dataset}/kneaddata_output")
+        ouput = directory("{dataset}/kneaddata_output/")
     threads: 8
 
     shell:
-        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o  {output} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} {database}"
+        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o {output} {database} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} "
 
 
 rule reformat_file:
@@ -71,49 +97,17 @@ rule reformat_file:
 
     shell:
         "/Users/bengels/Desktop/StageWetsus2022/BakedInBiobakery/biobakery/appModels/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input.input1}/{input.data}_R1_{params.file1} in2={input.input1}/{input.data}_R1_{params.file2} out={output}"
-    # run:
-    #demofile_wetsus_0/kneaddata_output/demofile_wetsus_0_R1_kneaddata_paired_1.fastq
-    #demofile_wetsus_0/kneaddata_output/demofile_wetsus_0_R1_kneaddata_paired_1.fastq
-    #     file1 = ""
-    #     file2 = ""
-    #     for folder in str(input).split(" "):
-    #         for path in os.listdir(str(folder)):
-    #             # print(f)
-    #             if "paired_1" in str(path):
-    #                 file1 = str(path)
-    #             elif "paired_2" in str(path):
-    #                 file2 = str(path)
-    #     for o in str(output).split(" "):
-    #         os.system(f"/Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={folder}/{file1} in2={folder}/{file2} out={o}")
 
-
-# def find_files_in_directories(file_path):
-#         """
-#         Scrapes the directory that is given as variable file_pathway
-#         :return: void
-#         """
-#         list_files = []
-#         for file in os.listdir(file_path):
-#             objects_in_directory = os.path.join(file_path, file)
-#             # checking if it is a file
-#             if os.path.isfile(objects_in_directory):
-#                 list_files.append(objects_in_directory)
-#         return list_files
-#
-#
-# interleave_list = find_files_in_directories(config["interleave_map"])
 
 rule humannTool:
         input: "{dataset}/interleaved.fastq"
-        params:
-            protein_database="--protein-database " + str(config["protein_db"]),
-            bypass_n_search=config["bypass_n_search"],
-            nucleotide_db=" --nucleotide-database " + config["nucleotide_db"]
+
+
         threads: 2
         output: directory("{dataset}/humantool_output_{name}")
 
         shell:
-            "humann -i {input} -o {output} {params.protein_database} {params.bypass_n_search} {params.nucleotide_db} --input-format fastq"
+            "humann -i {input} -o {output} {protein_database} {bypass_n_search} {nucleotide_db} {verbose} {remove_temp_output} --input-format fastq"
 
 # rule write_to_db:
 #         # input: "{dataset}/humantool_output_{name}/interleaved_map_name_genefamilies.tsv"
