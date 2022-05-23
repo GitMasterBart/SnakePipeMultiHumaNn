@@ -8,6 +8,38 @@ workdir: config['inputfiles']
 SAMPLES = config["samples"]
 NAME = config["name"]
 dataset = config["dataset"]
+trimmomatic = "--bypass-trim"
+fastqc_start = ""
+fastqc_end = ""
+bypass_trf = ""
+database = ""
+
+## variables
+try:
+    database = "-db " + config['silvadatabase'],
+except (KeyError, TypeError):
+    pass
+
+try:
+    fastqc_end = config["fastqc-end"]
+except (KeyError, TypeError):
+    pass
+
+try:
+    fastqc_start = config["fastqc-start"]
+except (KeyError, TypeError):
+    pass
+
+try:
+    trimmomatic = "--trimmomatic " + config["trimmomatic"],
+except (KeyError, TypeError):
+    pass
+
+try:
+    bypass_trf = config["bypass_trf"],
+except (KeyError, TypeError):
+    pass
+
 
 rule all:
     input:
@@ -17,23 +49,19 @@ rule all:
 rule kneaddata:
     input:
        "{dataset}"
-    params: database=config['silvadatabase'],
-        trimmomatic=config["trimmomatic"],
-        fastqc_start=config["fastqc-start"],
-        fastqc_end=config["fastqc-end"],
-        bypass_trf=config["--bypass-trf"],
-
     output:
             # output = "{sample}.fastqc"
         ouput = directory("{dataset}/kneaddata_output")
     threads: 8
 
     shell:
-        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o  {output} {params.trimmomatic} {params.fastqc_start} {params.fastqc_end} {params.bypass_trf} {params.database}"
+        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o  {output} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} {database}"
 
 
 rule reformat_file:
-    input:"{dataset}"
+    input:
+        input1 ="{dataset}/kneaddata_output",
+        data = "{dataset}"
 
     output: "{dataset}/interleaved.fastq"
     threads: 8
@@ -42,8 +70,10 @@ rule reformat_file:
         file2 = "kneaddata_paired_2.fastq"
 
     shell:
-        "/Users/bengels/Desktop/StageWetsus2022/BakedInBiobakery/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input}/kneaddata_output/{input}_R1_{params.file1} in2={input}/kneaddata_output/{input}_R1_{params.file2} out={output}"
+        "/Users/bengels/Desktop/StageWetsus2022/BakedInBiobakery/biobakery/appModels/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input.input1}/{input.data}_R1_{params.file1} in2={input.input1}/{input.data}_R1_{params.file2} out={output}"
     # run:
+    #demofile_wetsus_0/kneaddata_output/demofile_wetsus_0_R1_kneaddata_paired_1.fastq
+    #demofile_wetsus_0/kneaddata_output/demofile_wetsus_0_R1_kneaddata_paired_1.fastq
     #     file1 = ""
     #     file2 = ""
     #     for folder in str(input).split(" "):
@@ -76,9 +106,9 @@ rule reformat_file:
 rule humannTool:
         input: "{dataset}/interleaved.fastq"
         params:
-            protein_database=config["protein-db"],
-            bypass_n_search=config["bypass-n-search"],
-            nucleotide_db=config["nucleotide_db"]
+            protein_database="--protein-database " + str(config["protein_db"]),
+            bypass_n_search=config["bypass_n_search"],
+            nucleotide_db=" --nucleotide-database " + config["nucleotide_db"]
         threads: 2
         output: directory("{dataset}/humantool_output_{name}")
 

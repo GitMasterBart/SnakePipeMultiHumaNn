@@ -6,23 +6,32 @@
 #  A : R1
 #  B : R2
 
-inputfiles: /Users/bengels/Desktop/Uploaded_files/poging2_v1/
-silvadatabase:  -db ~/Desktop/Uploaded_files/humann_dbs/silvadb/
-trimmomatic:  --trimmomatic ~/Desktop/kneaddataMap/Trimmomatic-0.36/
---bypass-trf: --bypass-trf
-fastqc-start: --run-fastqc-start
-fastqc-end:  --run-fastqc-end
-name: map_name
+inputfiles:
+
+
+# kneaddata
+silvadatabase:
+trimmomatic:
+bypass_trf:
+fastqc_start:
+fastqc_end:
+
+name: name_map
 samples: [_R1 ,_R2]
-dataset : [demofile_wetsus_0, demofile_wetsus_1]
+dataset : []
 
 # humanntool
 
-bypass-n-search: --bypass-nucleotide-search
-remove-temp-output: --remove-temp-output
-verbose: --verbose
-protein-db: --protein-database ~/Desktop/Uploaded_files/humann_dbs/unireffull/
-nucleotide_db: --nucleotide-database /Users/bengels/Desktop/Uploaded_files/humann_dbs/chocophlan
+bypass_n_search:
+remove-temp-output:
+verbose:
+protein_db:
+nucleotide_db:
 
-interleave_map: /Users/bengels/Desktop/StageWetsus2022/SnakePipeMultiHumaNn/interleave_map/
+interleave_map:
+
+
+
+
+
 
