@@ -69,7 +69,7 @@ except (KeyError, TypeError):
 
 rule all:
     input:
-        expand("{dataset}/humantool_output_{name}",name=NAME, dataset=dataset)
+        expand("{dataset}/write_log_{name}.log",name=NAME, dataset=dataset)
 
 
 rule kneaddata:
@@ -89,7 +89,7 @@ rule reformat_file:
         input1 ="{dataset}/kneaddata_output",
         data = "{dataset}"
 
-    output: "{dataset}/interleaved.fastq"
+    output: "{dataset}/interleaved_{dataset}.fastq"
     threads: 8
     params:
         file1 = "kneaddata_paired_1.fastq",
@@ -100,22 +100,23 @@ rule reformat_file:
 
 
 rule humannTool:
-        input: "{dataset}/interleaved.fastq"
-
-
+        input: "{dataset}/interleaved_{dataset}.fastq"
         threads: 2
         output: directory("{dataset}/humantool_output_{name}")
 
         shell:
             "humann -i {input} -o {output} {protein_database} {bypass_n_search} {nucleotide_db} {verbose} {remove_temp_output} --input-format fastq"
 
-# rule write_to_db:
-#         # input: "{dataset}/humantool_output_{name}/interleaved_map_name_genefamilies.tsv"
-#         # output: "{dataset}/log_{name}.log"
-#         run:
-#             from biobakery.appModels import write_to_database
-#             create_db = write_to_database.WriteToDb("/Users/bengels/Desktop/Uploaded_files/demofiles_wetsusR1R2_v1/humantool_output_map_name/interleaved_map_name_genefamilies.tsv", "beng", "Microbiologie", "2022-05-03", "FirstTestOnderzoek")
-#             create_db.add_results_to_db()
+rule write_to_db:
+        input: "{dataset}/humantool_output_{name}"
+        log: "{dataset}/write_log_{name}.log"
+        output: "{dataset}/write_log_{name}.log"
+        run:
+            from scripts.connect_to_database import DbConnector
+            for i in os.listdir(str(input)):
+                DbConnector(str(input) + "/" + str(i), 9, 1).write_to_dump_table()
+
+
 
 
 
