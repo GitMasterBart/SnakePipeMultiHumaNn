@@ -16,7 +16,7 @@ bypass_trf:
 fastqc_start:
 fastqc_end:
 
-name: name_map
+name:
 samples: [_R1 ,_R2]
 dataset : []
 
@@ -30,7 +30,9 @@ nucleotide_db:
 
 interleave_map:
 
-
+#user data
+user_index:
+research_index:
 
 
 

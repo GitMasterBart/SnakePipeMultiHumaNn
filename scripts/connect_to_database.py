@@ -26,6 +26,7 @@ class DbConnector:
             sql = "INSERT INTO biobakery_dumptable (gene, family, sample, result, researches_id_id, user_id_id) VALUES (%s,%s,%s,%s,%s,%s) "
             family = ""
             compleet_list = []
+            print(transformed_table)
             for i in range(len(transformed_table)):
                 if ":" or "|" in str(transformed_table.values[i][0]):
                     gene = transformed_table.values[i][0].split(":")[0]
@@ -40,7 +41,7 @@ class DbConnector:
                         # print([gene,family])
                         sample = str(transformed_table.values[i][1])
                         result = transformed_table.values[i][2]
-                print((gene, family, sample, result, self.r_id, self.u_id))
+                # print((gene, family, sample, result, self.r_id, self.u_id))
 
 
                 compleet_list.append((gene,family,sample,result, self.r_id, self.u_id))

@@ -6,7 +6,7 @@ configfile: "config.yaml"
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
 SAMPLES = config["samples"]
-NAME = config["name"]
+NAME =  "Non_name_specified"
 dataset = config["dataset"]
 trimmomatic = "--bypass-trim"
 fastqc_start = " "
@@ -14,12 +14,22 @@ fastqc_end = " "
 bypass_trf = "--bypass-trf"
 database = " "
 
+#userdata
+user_intials_index = config["user_index"]
+research_index = config["research_index"]
+
 remove_temp_output = " "
 verbose = " "
 bypass_n_search = " "
 nucleotide_db =" "
 protein_database = ""
 ## variables
+
+try:
+    NAME = config["name"]
+except (KeyError, TypeError):
+    pass
+
 try:
     database = "-db " + config['silvadatabase'],
 except (KeyError, TypeError):
@@ -112,9 +122,12 @@ rule write_to_db:
         log: "{dataset}/write_log_{name}.log"
         output: "{dataset}/write_log_{name}.log"
         run:
-            from scripts.connect_to_database import DbConnector
-            for i in os.listdir(str(input)):
-                DbConnector(str(input) + "/" + str(i), 9, 1).write_to_dump_table()
+            try:
+                from scripts.connect_to_database import DbConnector
+                for i in os.listdir(str(input)):
+                    DbConnector(str(input) + "/" + str(i), int(research_index) , int(user_intials_index)).write_to_dump_table()
+            except KeyError:
+                pass
 
 
 
