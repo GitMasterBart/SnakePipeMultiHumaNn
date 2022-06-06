@@ -6,7 +6,7 @@ configfile: "config.yaml"
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
 SAMPLES = config["samples"]
-NAME =  "Non_name_specified"
+name =  "Non_name_specified"
 dataset = config["dataset"]
 trimmomatic = "--bypass-trim"
 fastqc_start = " "
@@ -26,7 +26,7 @@ protein_database = ""
 ## variables
 
 try:
-    NAME = config["name"]
+    name = config["name"]
 except (KeyError, TypeError):
     pass
 
@@ -36,12 +36,12 @@ except (KeyError, TypeError):
     pass
 
 try:
-    fastqc_end = config["fastqc-end"]
+    fastqc_end = config["fastqc_end"]
 except (KeyError):
     pass
 
 try:
-    fastqc_start = config["fastqc-start"]
+    fastqc_start = config["fastqc_start"]
 except (KeyError):
     pass
 
@@ -76,58 +76,22 @@ try:
 except (KeyError, TypeError):
     pass
 
+# include: "kneaddata.snakefile"
+# include: "humann.snakefile"
+include: "databaseparser.snakefile"
 
 rule all:
     input:
-        expand("{dataset}/write_log_{name}.log",name=NAME, dataset=dataset)
+        expand("{dataset}/write_log_{name}.log",name=name,dataset=dataset)
 
 
-rule kneaddata:
-    input:
-       "{dataset}"
-    output:
-            # output = "{sample}.fastqc"
-        ouput = directory("{dataset}/kneaddata_output/")
-    threads: 8
-
-    shell:
-        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o {output} {database} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} "
 
 
-rule reformat_file:
-    input:
-        input1 ="{dataset}/kneaddata_output",
-        data = "{dataset}"
-
-    output: "{dataset}/interleaved_{dataset}.fastq"
-    threads: 8
-    params:
-        file1 = "kneaddata_paired_1.fastq",
-        file2 = "kneaddata_paired_2.fastq"
-
-    shell:
-        "/Users/bengels/Desktop/StageWetsus2022/BakedInBiobakery/biobakery/appModels/SnakePipeMultiHumaNn/bbmap/reformat.sh in1={input.input1}/{input.data}_R1_{params.file1} in2={input.input1}/{input.data}_R1_{params.file2} out={output}"
 
 
-rule humannTool:
-        input: "{dataset}/interleaved_{dataset}.fastq"
-        threads: 2
-        output: directory("{dataset}/humantool_output_{name}")
 
-        shell:
-            "humann -i {input} -o {output} {protein_database} {bypass_n_search} {nucleotide_db} {verbose} {remove_temp_output} --input-format fastq"
 
-rule write_to_db:
-        input: "{dataset}/humantool_output_{name}"
-        log: "{dataset}/write_log_{name}.log"
-        output: "{dataset}/write_log_{name}.log"
-        run:
-            try:
-                from scripts.connect_to_database import DbConnector
-                for i in os.listdir(str(input)):
-                    DbConnector(str(input) + "/" + str(i), int(research_index) , int(user_intials_index)).write_to_dump_table()
-            except KeyError:
-                pass
+
 
 
 
