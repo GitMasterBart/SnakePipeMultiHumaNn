@@ -1,0 +1,62 @@
+import os
+
+configfile: "../config.yaml"
+
+
+workDIR = config['inputfiles']
+workdir: config['inputfiles']
+SAMPLES = config["samples"]
+name =  "Non_name_specified"
+dataset = config["dataset"]
+trimmomatic = "--bypass-trim"
+fastqc_start = " "
+fastqc_end = " "
+bypass_trf = "--bypass-trf"
+database = " "
+
+#userdata
+user_intials_index = config["user_index"]
+research_index = config["research_index"]
+
+remove_temp_output = " "
+verbose = " "
+bypass_n_search = " "
+nucleotide_db =" "
+protein_database = ""
+## variables
+
+try:
+    name = config["name"]
+except (KeyError, TypeError):
+    pass
+
+try:
+    database = "-db " + config['silvadatabase'],
+except (KeyError, TypeError):
+    pass
+
+try:
+    fastqc_end = config["fastqc_end"]
+except (KeyError):
+    pass
+
+try:
+    fastqc_start = config["fastqc_start"]
+except (KeyError):
+    pass
+
+try:
+    trimmomatic = "--trimmomatic " + config["trimmomatic"]
+except (KeyError, TypeError):
+    pass
+
+
+include: "../kneaddata.snakefile"
+
+
+rule all:
+    input:
+        expand("{dataset}/export_fastqc_{name}.log", name= name , dataset=dataset)
+
+
+
