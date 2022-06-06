@@ -3,6 +3,7 @@ import sys
 import mysql.connector
 from mysql.connector import Error
 import pandas as pd
+import pandas.errors
 
 class DbConnector:
     def __init__(self, file, r_id, u_id):
@@ -20,13 +21,16 @@ class DbConnector:
             cursor = connection.cursor()
             cursor.execute("show tables;")
             myresult = cursor.fetchall()
+            first_column_object = str(pd.read_table(self.file).columns.tolist()[0])
             transformed_table = pd.DataFrame(pd.melt(pd.read_table(
                 self.file,
-                lineterminator='\n'), id_vars="# Gene Family"))
+                lineterminator='\n'), id_vars=first_column_object))
+            print(transformed_table)
             sql = "INSERT INTO biobakery_dumptable (gene, family, sample, result, researches_id_id, user_id_id) VALUES (%s,%s,%s,%s,%s,%s) "
             family = ""
             compleet_list = []
-            print(transformed_table)
+
+
             for i in range(len(transformed_table)):
                 if ":" or "|" in str(transformed_table.values[i][0]):
                     gene = transformed_table.values[i][0].split(":")[0]
@@ -48,12 +52,12 @@ class DbConnector:
 
             cursor.executemany(sql,compleet_list)
             connection.commit()
-            print(range(len(transformed_table)))
+            # print(range(len(transformed_table)))
 
 
 
-    except Error as e:
-        print("Error while connecting to MySQL", e)
+    except (Error, pandas.errors.Rule) :
+        print("Error while connecting to MySQL")
 
 def main():
     DbConnector("/Users/bengels/Desktop/Uploaded_files/demofiles_wetsusR1R2_v1/humantool_output_map_name/interleaved_map_name_genefamilies.tsv", 9, 1).write_to_dump_table()
