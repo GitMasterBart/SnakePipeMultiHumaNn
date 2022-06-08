@@ -57,11 +57,10 @@ except (KeyError, TypeError):
     pass
 
 include: "../humann.snakefile"
-# include: "../databaseparser.snakefile"
+include: "../databaseparser.snakefile"
 
-
+print(database)
 rule all:
     input:
         expand("{dataset}/write_log_{name}.log",name=name,dataset=dataset)
-
 

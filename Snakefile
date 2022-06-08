@@ -76,8 +76,8 @@ try:
 except (KeyError, TypeError):
     pass
 
-# include: "kneaddata.snakefile"
-# include: "humann.snakefile"
+include: "kneaddata.snakefile"
+include: "humann.snakefile"
 include: "databaseparser.snakefile"
 
 rule all:
