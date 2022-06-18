@@ -15,10 +15,11 @@ trimmomatic:
 bypass_trf:
 fastqc_start:
 fastqc_end:
-
 name:
 samples: [_R1 ,_R2]
 dataset : []
+
+tsv_samples: [genefamilies, pathabundance, pathcoverage]
 
 # humanntool
 

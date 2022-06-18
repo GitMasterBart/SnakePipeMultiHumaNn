@@ -60,7 +60,7 @@ class DbConnector:
         print("Error while connecting to MySQL")
 
 def main():
-    DbConnector("/Users/bengels/Desktop/Uploaded_files/demofiles_wetsusR1R2_v1/humantool_output_map_name/interleaved_map_name_genefamilies.tsv", 9, 1).write_to_dump_table()
+    DbConnector("/Users/bengels/sample_results/demo_pathcoverage.tsv", 46, 1).write_to_dump_table()
 
 
 

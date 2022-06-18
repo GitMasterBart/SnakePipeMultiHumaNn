@@ -2,6 +2,8 @@ import os
 
 configfile: "../config.yaml"
 
+ruleorder: reformat_file > humannTool > regroup > write_to_db
+
 
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
