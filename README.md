@@ -75,6 +75,6 @@ In a pipeline the main goal is to go form point A to point D this can be achieve
 `rule write_to_db` the name of this rules is almost self explanatory but because I will not assume that everyone knows what 'db' means, wil will explane. This rule writes all the results to the database of choice. It uses a script that is atached in the `script` folder named: `connect_to_database.py`.
 
 
-[^1] https://github.com/biobakery/biobakery/wiki/kneaddata
-[^2] https://github.com/biobakery/biobakery/wiki/humann3
+[^1]: https://github.com/biobakery/biobakery/wiki/kneaddata
+[^2]: https://github.com/biobakery/biobakery/wiki/humann3
 
