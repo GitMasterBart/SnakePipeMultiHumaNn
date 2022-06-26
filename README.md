@@ -2,7 +2,7 @@
 ![flowchart humenapipe](dag.svg
 )
 
-### Make this pipeline usefull
+### Intergrade the backbone ofthe BakedInBiobakery by setting-up this pipeline
 
 **install** 
 
