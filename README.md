@@ -2,7 +2,7 @@
 ![flowchart humenapipe](dag.svg
 )
 
-### Intergrade the backbone of the BakedInBiobakery by setting-up this pipeline
+### Intergrade the backbone of the [BakedinBiobakery](https://github.com/GitMasterBart/BakedInBiobakery) by setting-up this pipeline
 
 **install** 
 
