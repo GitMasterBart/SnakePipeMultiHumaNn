@@ -1,11 +1,14 @@
 import os
 
 configfile: "config.yaml"
-
+# order of execution
+ruleorder: kneaddata > export_fastqc > reformat_file > humannTool > regroup > write_to_db
 
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
 SAMPLES = config["samples"]
+
+
 name =  "Non_name_specified"
 dataset = config["dataset"]
 trimmomatic = "--bypass-trim"
@@ -50,7 +53,6 @@ try:
 except (KeyError, TypeError):
     pass
 
-
 try:
     remove_temp_output = config["remove_temp_output"]
 except (KeyError, TypeError):
@@ -83,18 +85,3 @@ include: "databaseparser.snakefile"
 rule all:
     input:
         expand("{dataset}/write_log_{name}.log",name=name,dataset=dataset)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

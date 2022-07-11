@@ -1,7 +1,7 @@
 import os
 
 configfile: "../config.yaml"
-
+# order of execution
 ruleorder: reformat_file > humannTool > regroup > write_to_db
 
 

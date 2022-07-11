@@ -1,13 +1,14 @@
 import os
 
 configfile: "../config.yaml"
-
+# order of execution
 ruleorder: kneaddata > export_fastqc
 
 
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
 SAMPLES = config["samples"]
+
 name =  "Non_name_specified"
 dataset = config["dataset"]
 trimmomatic = "--bypass-trim"
@@ -59,4 +60,9 @@ include: "../kneaddata.snakefile"
 rule all:
     input:
         expand("{dataset}/export_fastqc_{name}.log", name= name , dataset=dataset)
+
+
+
+
+
 
