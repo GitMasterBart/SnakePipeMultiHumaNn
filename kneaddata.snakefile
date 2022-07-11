@@ -1,17 +1,23 @@
+
 rule kneaddata:
+"""
+pre-processes the data with the help of the kneaddata tool
+"""
     input:
-       "{dataset}"
+       dataset = "{dataset}"
+
     output:
-            # output = "{sample}.fastqc"
-        ouput = directory("{dataset}/kneaddata_output/")
+        output = directory("{dataset}/kneaddata_output/"),
     threads: 16
 
     shell:
-        "kneaddata -i {input}/{input}{SAMPLES[0]}.fastq -i {input}/{input}{SAMPLES[1]}.fastq -o {output} {database} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} "
-
+        "kneaddata -i {input.dataset}/{input.dataset}{SAMPLES[0]}.fastq -i {input.dataset}/{input.dataset}{SAMPLES[1]}.fastq -o {output} {database} {trimmomatic} {fastqc_start} {fastqc_end} {bypass_trf} "
 
 
 rule export_fastqc:
+"""
+Moves the paired-end fastqc files to a the fastqc_check folder.
+"""
     input:
         input1 = "{dataset}/kneaddata_output/",
         data= "{dataset}"
