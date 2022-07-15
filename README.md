@@ -1,4 +1,16 @@
 # SnakePipeMultiHumaNn
+*Contact:*
+
+*Author: Bart Engels*
+<br>
+*Website: www.bartengels.eu*
+<br>
+*Email: b.engels@bioinf.nl*
+<br>
+*Version: v1*
+
+
+
 ![flowchart humenapipe](dag.svg
 )
 
@@ -77,7 +89,7 @@ In a pipeline the main goal is to go form point A to point D this can be achieve
 
 `rule reformat_file` in this rule the bbmap tool `reformat.sh` is used to reformat the paired reads to one interleaved file. This because it is eraser to extract the data in the following rules  
 
-`rule humannTool` as it clearly states runs the HumaNn3.0 [^2] tool provided by Bio-bakery. As with the kneaddata the way it runs depends on the input from the user. How the parameters influence the human tool can be found in the help manual from the bio-bakery. 
+`rule humannTool` as it clearly states runs the HumaNn3.0 [^2] tool provided by Bio-bakery. As with the kneaddata, the way it runs depends on the input from the user. How the parameters influence the human tool can be found in the help manual from the bio-bakery. 
 
 <a name="rul3"></a>
 #### Rules from databaseparsing.snakefile
