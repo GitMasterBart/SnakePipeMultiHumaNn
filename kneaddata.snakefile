@@ -1,8 +1,8 @@
 
 rule kneaddata:
-"""
-pre-processes the data with the help of the kneaddata tool
-"""
+    """
+    pre-processes the data with the help of the kneaddata tool
+    """
     input:
        dataset = "{dataset}"
 
@@ -15,9 +15,10 @@ pre-processes the data with the help of the kneaddata tool
 
 
 rule export_fastqc:
-"""
-Moves the paired-end fastqc files to a the fastqc_check folder.
-"""
+    """
+    Moves the paired-end fastqc files to a the fastqc_check folder.
+    """
+
     input:
         input1 = "{dataset}/kneaddata_output/",
         data= "{dataset}"
@@ -32,3 +33,5 @@ Moves the paired-end fastqc files to a the fastqc_check folder.
 
     shell:
         "mv {input.input1}/{params.fastq}/{input.data}_R1_{params.fastqc_1} {input.input1}/{params.fastq}/{input.data}_R1_{params.fastqc_p1} {input.input1}/{params.fastq}/{input.data}_R1_{params.fastqc_p2} {input.input1}/{params.fastq}/{input.data}_R2_{params.fastqc_1}   ~/Desktop/StageWetsus2022/BakedInBiobakery/static/img/fastqc_results/"
+
+

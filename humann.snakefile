@@ -1,7 +1,7 @@
 rule reformat_file:
-"""
-Put the R1 and R2 results together in one file. (interleaved file)
-"""
+    """
+    Put the R1 and R2 results together in one file. (interleaved file)
+    """
     input:
         input1 ="{dataset}/kneaddata_output",
         data = "{dataset}"
@@ -17,9 +17,9 @@ Put the R1 and R2 results together in one file. (interleaved file)
 
 
 rule humannTool:
-"""
-executes the humaNn3.0 tool from the bio bakery
-"""
+        """
+        executes the humaNn3.0 tool from the bio bakery
+        """
         input: "{dataset}/interleaved_{dataset}.fastq"
         threads: 8
         output: directory("{dataset}/humantool_output_{name}")

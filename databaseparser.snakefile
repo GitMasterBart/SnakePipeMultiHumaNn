@@ -1,7 +1,7 @@
 rule regroup:
-"""
-Converters the UniRef (Suzek et al., 2007) abundance profiles to EC abundance profiles
-"""
+    """
+    Converters the UniRef (Suzek et al., 2007) abundance profiles to EC abundance profiles
+    """
     input:
         pathway = "{dataset}/humantool_output_{name}",
         dataset = '{dataset}'
@@ -16,9 +16,9 @@ Converters the UniRef (Suzek et al., 2007) abundance profiles to EC abundance pr
             shell("humann_regroup_table --input " + workDIR + '/' + str(input.pathway) + "/interleaved_" +  input.dataset + "_" + str(files) + ".tsv" + " --output " + workDIR + "/" + str(output) + "/" + str(files) + input.dataset + ".tsv" + " --group uniref50_rxn" )
 
 rule write_to_db:
-"""
-Writes the data form regrouped files to database
-"""
+        """
+        Writes the data form regrouped files to database
+        """
         input: "{dataset}/regrouped_files_{name}/"
         log: "{dataset}/write_log_{name}.log"
         output: "{dataset}/write_log_{name}.log"
