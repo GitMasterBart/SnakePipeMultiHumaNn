@@ -1,3 +1,8 @@
+__author__ = "Bart Engels"
+__date__ = "28-07-2022"
+__version__ = "v1"
+
+
 rule regroup:
     """
     Converters the UniRef (Suzek et al., 2007) abundance profiles to EC abundance profiles

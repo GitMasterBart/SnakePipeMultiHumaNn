@@ -1,4 +1,9 @@
-import os
+"""
+Snakefile for the rules in kneaddata.snakefile, humann.snakefile and databaseparser.snakefile
+"""
+__author__ = "Bart Engels"
+__date__ = "28-07-2022"
+__version__ = "v1"
 
 configfile: "config.yaml"
 # order of execution
@@ -85,3 +90,4 @@ include: "databaseparser.snakefile"
 rule all:
     input:
         expand("{dataset}/write_log_{name}.log",name=name,dataset=dataset)
+

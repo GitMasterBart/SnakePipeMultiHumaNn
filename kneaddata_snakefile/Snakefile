@@ -1,9 +1,13 @@
-import os
+"""
+Snakefile for the rules in kneaddata.snakefile
+"""
+__author__ = "Bart Engels"
+__date__ = "28-07-2022"
+__version__ = "v1"
 
 configfile: "../config.yaml"
 # order of execution
 ruleorder: kneaddata > export_fastqc
-
 
 workDIR = config['inputfiles']
 workdir: config['inputfiles']
@@ -60,9 +64,3 @@ include: "../kneaddata.snakefile"
 rule all:
     input:
         expand("{dataset}/export_fastqc_{name}.log", name= name , dataset=dataset)
-
-
-
-
-
-
