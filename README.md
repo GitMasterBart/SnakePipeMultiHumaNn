@@ -30,7 +30,7 @@
 
 Install the bbmap packages because you need the bbmap/reformat.sh file. 
 This can be done on: https://sourceforge.net/projects/bbmap/
-and plays it in de rout of your snakemake file. 
+and plays it in de root of your snakemake file. 
 
 <a name="venv"></a>
 **Virtual env**
@@ -43,7 +43,6 @@ These are:
 * snakemake 
 * bowtie2
 
-Download bbmap, and place this folder in the root of the SnakePipeMultiHumaNn
 
 <a name="path"></a>
 **Pathways**
