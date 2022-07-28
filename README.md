@@ -43,6 +43,8 @@ These are:
 * snakemake 
 * bowtie2
 
+Download bbmap, and place this folder in the root of the SnakePipeMultiHumaNn
+
 <a name="path"></a>
 **Pathways**
 
